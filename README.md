@@ -1,19 +1,43 @@
-[![Build Status](https://travis-ci.com/w3c/feedvalidator.svg)](https://travis-ci.com/w3c/feedvalidator)
+# Feed Validator
 
-Some tests, and some functionality, will not be enabled unless a full set
-of 32-bit character encodings are available through Python.
+This is a command-line focused fork for of the W3C's [Feed Validator](https://validator.w3.org/feed/) for validating RSS and and Atom feeds.
 
-The feedvalidator relies on html5lib for parsing HTML.
+This validator is written in Python 2 and runs using Docker.
 
-The package 'iconvcodec' provides the necessary codecs, if your underlying
-operating system supports them. Its web page is at
-<http://cjkpython.i18n.org/#iconvcodec>, and a range of packages are
-provided.
+## Building
 
-Python 2.3.x is required, for its Unicode support.
+To build:
 
-To run with Docker:
-```bash
+```sh
 docker build -t feedvalidator .
-docker run -p 8080:80 feedvalidator
 ```
+
+## Validating a URL
+
+To validate a remote URL, provide it as an argument to the image:
+
+```sh
+docker run --rm feedvalidator https://www.example.net/rss.xml
+```
+
+## Validating a local file
+
+To validate a local file, mount the file as a volume and use that file path:
+
+```sh
+docker run --rm --read-only -v $(pwd):/dat feedvalidator /dat/atom.xml
+```
+
+## Configuring validation levels
+
+The validtor supports basic, strict and experimental validation determined by the second argument:
+
+| Argument     | Meaning |
+| ------------ | ------- |
+| A            | The most basic level |
+| AA (default) | Mimics online validator |
+| AAA          | Experimental; these rules WILL change or disappear in future versions |
+
+## Caveat
+
+This a quick-and-dirty fork; there's probably plenty in this repo that doesn't need to be here.
